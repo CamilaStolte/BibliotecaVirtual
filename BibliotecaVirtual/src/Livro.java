@@ -25,4 +25,19 @@ public class Livro {
     public String toString() {
         return "Livro: " + titulo + ", Autor: " + autor + ", Ano: " + anoPublicacao;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Livro livro = (Livro) o;
+        return titulo.equals(livro.titulo) && autor.equals(livro.autor);
+    }
+
+    @Override
+    public int hashCode() {
+        return titulo.hashCode() + autor.hashCode();
+    }
 }
