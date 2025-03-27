@@ -8,6 +8,16 @@ public class App {
 
         biblioteca.listarLivros();
 
-        System.out.println("Total de livros na biblioteca: " + biblioteca.getQuantidadeLivros());
+        System.out.println("\nTestando a lista de espera:");
+        biblioteca.adicionarListaEspera("Camila");
+        biblioteca.adicionarListaEspera("Luan");
+        biblioteca.removerListaEspera(); // Remove João
+
+        System.out.println("\nTestando o histórico de navegação:");
+        biblioteca.visualizarLivro("O Iluminado");
+        biblioteca.visualizarLivro("It: A Coisa");
+        biblioteca.mostrarHistorico();
+
+        System.out.println("\nTotal de livros na biblioteca: " + biblioteca.getQuantidadeLivros());
     }
 }
