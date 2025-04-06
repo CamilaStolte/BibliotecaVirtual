@@ -5,29 +5,58 @@ public class Biblioteca {
     private Queue<String> listaEspera;
     private Stack<Livro> historicoNavegacao;
     private HashMap<Livro, Set<Livro>> grafoRecomendacoes;
+    private NoArvore raiz;
 
     public Biblioteca() {
         this.colecaoLivros = new LinkedList<>();
         this.listaEspera = new LinkedList<>();
         this.historicoNavegacao = new Stack<>();
         this.grafoRecomendacoes = new HashMap<>();
+        this.raiz = null;
     }
 
     public void adicionarLivro(String titulo, String autor, int anoPublicacao) {
         Livro novoLivro = new Livro(titulo, autor, anoPublicacao);
         colecaoLivros.add(novoLivro);
         grafoRecomendacoes.put(novoLivro, new HashSet<>());
+        if (raiz == null) {
+            raiz = new NoArvore(novoLivro);
+        } else {
+            inserirNaArvore(raiz, novoLivro);
+        }
         System.out.println("Livro adicionado com sucesso!");
     }
 
+    private void inserirNaArvore(NoArvore no, Livro livro) {
+        if (livro.getTitulo().compareToIgnoreCase(no.getLivro().getTitulo()) < 0) {
+            if (no.getEsquerda() == null) {
+                no.setEsquerda(new NoArvore(livro));
+            } else {
+                inserirNaArvore(no.getEsquerda(), livro);
+            }
+        } else {
+            if (no.getDireita() == null) {
+                no.setDireita(new NoArvore(livro));
+            } else {
+                inserirNaArvore(no.getDireita(), livro);
+            }
+        }
+    }
+
     public void listarLivros() {
-        if (colecaoLivros.isEmpty()) {
+        if (raiz == null) {
             System.out.println("A biblioteca está vazia!");
         } else {
-            System.out.println("Coleção de livros:");
-            for (Livro livro : colecaoLivros) {
-                System.out.println(livro);
-            }
+            System.out.println("Coleção de livros (em ordem alfabética):");
+            listarEmOrdem(raiz);
+        }
+    }
+
+    private void listarEmOrdem(NoArvore no) {
+        if (no != null) {
+            listarEmOrdem(no.getEsquerda());
+            System.out.println(no.getLivro());
+            listarEmOrdem(no.getDireita());
         }
     }
 
@@ -87,14 +116,27 @@ public class Biblioteca {
     }
 
     public void visualizarLivro(String titulo) {
-        for (Livro livro : colecaoLivros) {
-            if (livro.getTitulo().equalsIgnoreCase(titulo)) {
-                historicoNavegacao.push(livro);
-                System.out.println("Visualizando: " + livro);
-                return;
-            }
+        Livro livro = buscarNaArvore(raiz, titulo);
+        if (livro != null) {
+            historicoNavegacao.push(livro);
+            System.out.println("Visualizando: " + livro);
+        } else {
+            System.out.println("Livro '" + titulo + "' não encontrado!");
         }
-        System.out.println("Livro '" + titulo + "' não encontrado!");
+    }
+
+    private Livro buscarNaArvore(NoArvore no, String titulo) {
+        if (no == null) {
+            return null;
+        }
+        int comparacao = titulo.compareToIgnoreCase(no.getLivro().getTitulo());
+        if (comparacao == 0) {
+            return no.getLivro();
+        } else if (comparacao < 0) {
+            return buscarNaArvore(no.getEsquerda(), titulo);
+        } else {
+            return buscarNaArvore(no.getDireita(), titulo);
+        }
     }
 
     public void mostrarHistorico() {

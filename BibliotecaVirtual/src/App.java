@@ -34,6 +34,8 @@ public class App {
         biblioteca.adicionarRecomendacao("A Metamorfose", "It: A Coisa");
         biblioteca.adicionarRecomendacao("A Metamorfose", "1984");
 
+        biblioteca.listarLivros();
+
         System.out.println("\nTotal de livros na biblioteca: " + biblioteca.getQuantidadeLivros());
         System.out.println("\nTestando recomendações:");
         biblioteca.sugerirLivros("1984");
