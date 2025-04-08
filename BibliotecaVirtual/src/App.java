@@ -41,5 +41,57 @@ public class App {
         biblioteca.sugerirLivros("1984");
         biblioteca.sugerirLivros("O Senhor dos Anéis");
         biblioteca.sugerirLivros("It: A Coisa");
+
+        System.out.println("\n=== Teste de Ordenação com 10.000 Livros ===");
+        
+        String[] titulosAleatorios = GeradorDeNomesDeLivros.gerarNomes(10000);
+
+        System.out.println("\nPrimeiros 5 elementos antes da ordenação:");
+        for (int i = 0; i < 5 && i < titulosAleatorios.length; i++) {
+            System.out.println((i + 1) + ": \"" + titulosAleatorios[i] + "\" (length: " + titulosAleatorios[i].length() + ")");
+        }
+
+        // Testar Bubble Sort
+        long inicioBubble = System.currentTimeMillis();
+        String[] resultadoBubble = BubbleSort.ordenar(titulosAleatorios.clone());
+        long fimBubble = System.currentTimeMillis();
+
+        // Testar Merge Sort
+        long inicioMerge = System.currentTimeMillis();
+        String[] resultadoMerge = MergeSort.ordenar(titulosAleatorios.clone());
+        long fimMerge = System.currentTimeMillis();
+
+        System.out.println("\nResultados da ordenação:");
+        System.out.println("Bubble Sort:");
+        System.out.println("Tempo: " + (fimBubble - inicioBubble) + "ms");
+        System.out.println("Comparações: " + BubbleSort.getContadorComparacoes());
+        
+        System.out.println("\nMerge Sort:");
+        System.out.println("Tempo: " + (fimMerge - inicioMerge) + "ms");
+        System.out.println("Comparações: " + MergeSort.getContadorComparacoes());
+        
+        System.out.println("\nVerificando arrays ordenados:");
+        System.out.println("Tamanho do resultadoBubble: " + (resultadoBubble != null ? resultadoBubble.length : "null"));
+        System.out.println("Tamanho do resultadoMerge: " + (resultadoMerge != null ? resultadoMerge.length : "null"));
+
+        System.out.println("\nPrimeiros 5 livros ordenados (Bubble Sort):");
+        if (resultadoBubble != null && resultadoBubble.length > 0) {
+            for (int i = 0; i < 5 && i < resultadoBubble.length; i++) {
+                String value = resultadoBubble[i] != null ? "\"" + resultadoBubble[i] + "\"" : "null";
+                System.out.println((i + 1) + ": " + value + " (length: " + (resultadoBubble[i] != null ? resultadoBubble[i].length() : -1) + ")");
+            }
+        } else {
+            System.out.println("Erro: Array do Bubble Sort está vazio ou nulo!");
+        }
+        
+        System.out.println("\nPrimeiros 5 livros ordenados (Merge Sort):");
+        if (resultadoMerge != null && resultadoMerge.length > 0) {
+            for (int i = 0; i < 5 && i < resultadoMerge.length; i++) {
+                String value = resultadoMerge[i] != null ? "\"" + resultadoMerge[i] + "\"" : "null";
+                System.out.println((i + 1) + ": " + value + " (length: " + (resultadoMerge[i] != null ? resultadoMerge[i].length() : -1) + ")");
+            }
+        } else {
+            System.out.println("Erro: Array do Merge Sort está vazio ou nulo!");
+        }
     }
 }
