@@ -135,8 +135,8 @@ public class Biblioteca {
         } else if (comparacao < 0) {
             return buscarNaArvore(no.getEsquerda(), titulo);
         } else {
-            return buscarNaArvore(no.getDireita(), titulo);
-        }
+        return buscarNaArvore(no.getDireita(), titulo);
+    }
     }
 
     public void mostrarHistorico() {
@@ -152,5 +152,75 @@ public class Biblioteca {
 
     public int getQuantidadeLivros() {
         return colecaoLivros.size();
+    }
+
+    public boolean buscaEmProfundidade(String titulo) {
+        List<String> visitados = new ArrayList<>();
+        boolean encontrado = buscaEmProfundidadeRecursivo(raiz, titulo, visitados);
+        System.out.print("Caminho DFS: ");
+        for (int i = 0; i < visitados.size(); i++) {
+            System.out.print(visitados.get(i));
+            if (i < visitados.size() - 1) {
+                System.out.print(" -> ");
+            }
+        }
+        System.out.println();
+    
+        return encontrado;
+    }
+
+    private boolean buscaEmProfundidadeRecursivo(NoArvore no, String titulo, List<String> visitados) {
+        if (no == null) return false;
+
+        visitados.add(no.getLivro().getTitulo());
+
+        if (no.getLivro().getTitulo().equalsIgnoreCase(titulo)) return true;
+
+        return buscaEmProfundidadeRecursivo(no.getEsquerda(), titulo, visitados) ||
+               buscaEmProfundidadeRecursivo(no.getDireita(), titulo, visitados);
+    }
+
+    public boolean buscaEmLargura(String titulo) {
+        if (raiz == null) {
+            System.out.println("Caminho BFS: []");
+            return false;
+        }
+        List<String> visitados = new ArrayList<>();
+        Queue<NoArvore> fila = new LinkedList<>();
+        fila.add(raiz);
+    
+        while (!fila.isEmpty()) {
+            NoArvore atual = fila.poll();
+            visitados.add(atual.getLivro().getTitulo());
+    
+            if (atual.getLivro().getTitulo().equalsIgnoreCase(titulo)) {
+                System.out.print("Caminho BFS: ");
+                for (int i = 0; i < visitados.size(); i++) {
+                    System.out.print(visitados.get(i));
+                    if (i < visitados.size() - 1) {
+                        System.out.print(" -> ");
+                    }
+                }
+                System.out.println();
+                return true;
+            }
+    
+            if (atual.getEsquerda() != null) {
+                fila.add(atual.getEsquerda());
+            }
+            if (atual.getDireita() != null) {
+                fila.add(atual.getDireita());
+            }
+        }
+    
+        System.out.print("Caminho BFS: ");
+        for (int i = 0; i < visitados.size(); i++) {
+            System.out.print(visitados.get(i));
+            if (i < visitados.size() - 1) {
+                System.out.print(" -> ");
+            }
+        }
+        System.out.println();
+        return false;
     }
 }

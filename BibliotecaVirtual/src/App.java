@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class App {
     public static void main(String[] args) {
         Biblioteca biblioteca = new Biblioteca();
@@ -51,12 +53,10 @@ public class App {
             System.out.println((i + 1) + ": \"" + titulosAleatorios[i] + "\" (length: " + titulosAleatorios[i].length() + ")");
         }
 
-        // Testar Bubble Sort
         long inicioBubble = System.currentTimeMillis();
         String[] resultadoBubble = BubbleSort.ordenar(titulosAleatorios.clone());
         long fimBubble = System.currentTimeMillis();
 
-        // Testar Merge Sort
         long inicioMerge = System.currentTimeMillis();
         String[] resultadoMerge = MergeSort.ordenar(titulosAleatorios.clone());
         long fimMerge = System.currentTimeMillis();
@@ -93,5 +93,19 @@ public class App {
         } else {
             System.out.println("Erro: Array do Merge Sort está vazio ou nulo!");
         }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n=== Busca de Livros ===");
+        System.out.print("Digite o título do livro que deseja buscar: ");
+        String tituloBusca = scanner.nextLine();
+
+        System.out.println("\nBuscando '" + tituloBusca + "' usando DFS:");
+        boolean encontradoDFS = biblioteca.buscaEmProfundidade(tituloBusca);
+        System.out.println("Resultado DFS: " + (encontradoDFS ? "Livro encontrado!" : "Livro não encontrado."));
+
+        System.out.println("\nBuscando '" + tituloBusca + "' usando BFS:");
+        boolean encontradoBFS = biblioteca.buscaEmLargura(tituloBusca);
+        System.out.println("Resultado BFS: " + (encontradoBFS ? "Livro encontrado!" : "Livro não encontrado."));
+
+        scanner.close();
     }
 }
