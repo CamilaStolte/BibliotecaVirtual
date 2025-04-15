@@ -106,6 +106,11 @@ public class App {
         boolean encontradoBFS = biblioteca.buscaEmLargura(tituloBusca);
         System.out.println("Resultado BFS: " + (encontradoBFS ? "Livro encontrado!" : "Livro não encontrado."));
 
+        System.out.println("\n=== Recomendações por Menor Distância ===");
+        System.out.print("Digite o título do livro para recomendação: ");
+        String tituloRecomendacao = scanner.nextLine();
+        biblioteca.recomendarPorDijkstra(tituloRecomendacao);
+
         scanner.close();
     }
 }

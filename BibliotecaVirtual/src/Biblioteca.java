@@ -223,4 +223,48 @@ public class Biblioteca {
         System.out.println();
         return false;
     }
+
+    public void recomendarPorDijkstra(String tituloOrigem) {
+        Livro origem = null;
+        for (Livro livro : colecaoLivros) {
+            if (livro.getTitulo().equalsIgnoreCase(tituloOrigem)) {
+                origem = livro;
+                break;
+            }
+        }
+        if (origem == null) {
+            System.out.println("Livro '" + tituloOrigem + "' não encontrado!");
+            return;
+        }
+
+        Map<Livro, Integer> distancias = djikstraSimples(grafoRecomendacoes, origem);
+        System.out.println("\nRecomendações baseadas na menor distância a partir de '" + tituloOrigem + "':");
+        List<Map.Entry<Livro, Integer>> listaDistancias = new ArrayList<>(distancias.entrySet());
+        listaDistancias.sort((a, b) -> a.getValue().compareTo(b.getValue()));
+        for (Map.Entry<Livro, Integer> entrada : listaDistancias) {
+            if (!entrada.getKey().equals(origem)) {
+                System.out.println("Livro: " + entrada.getKey().getTitulo() + ", Distância: " + entrada.getValue());
+            }
+        }
+    }
+
+    private Map<Livro, Integer> djikstraSimples(HashMap<Livro, Set<Livro>> grafo, Livro origem) {
+        Map<Livro, Integer> distancias = new HashMap<>();
+        Queue<Livro> fila = new LinkedList<>();
+        distancias.put(origem, 0);
+        fila.add(origem);
+
+        while (!fila.isEmpty()) {
+            Livro atual = fila.poll();
+            int distanciaAtual = distancias.get(atual);
+
+            for (Livro vizinho : grafo.getOrDefault(atual, new HashSet<>())) {
+                if (!distancias.containsKey(vizinho)) {
+                    distancias.put(vizinho, distanciaAtual + 1);
+                    fila.add(vizinho);
+                }
+            }
+        }
+        return distancias;
+    }
 }
